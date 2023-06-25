@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_app/provider/weather_provider.dart';
+import 'package:weather_app/widgets/daily_forecast_list_widget.dart';
 import 'package:weather_app/widgets/hourly_list_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -32,6 +33,21 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        bottomNavigationBar: SizedBox(
+          height: 93,
+          child: BottomNavigationBar(
+            
+            backgroundColor: Colors.grey[900], items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.search),
+              label: '',
+            ),
+          ]),
+        ),
         body: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30),
@@ -94,6 +110,17 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           Container(
                             child: Text(
+                              'Mayormente nublado',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w200,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            child: Text(
                               'Mie, 10 Agosto 10:14 am',
                               style: TextStyle(
                                 color: Colors.white,
@@ -104,7 +131,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
-                      HourlyListWidget()
+                      HourlyListWidget(),
+                      DailyForecastListWidget()
                     ],
                   );
                 }
