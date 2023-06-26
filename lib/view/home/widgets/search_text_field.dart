@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_app/provider/weather_provider.dart';
 
-class SearchCityTextFieldWidget extends StatefulWidget {
-  const SearchCityTextFieldWidget({super.key});
+class SearchTextField extends StatefulWidget {
+  const SearchTextField({super.key});
 
   @override
-  State<SearchCityTextFieldWidget> createState() =>
-      _SearchCityTextFieldWidgetState();
+  State<SearchTextField> createState() =>
+      _SearchTextFieldState();
 }
 
-class _SearchCityTextFieldWidgetState extends State<SearchCityTextFieldWidget> {
+class _SearchTextFieldState extends State<SearchTextField> {
   final _textController = new TextEditingController();
   bool _isValidated = false;
 

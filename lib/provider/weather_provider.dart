@@ -6,7 +6,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:weather_app/models/daily_forecast_weather.dart';
 import 'package:weather_app/models/forecast.dart';
 import 'package:weather_app/models/weather.dart';
 

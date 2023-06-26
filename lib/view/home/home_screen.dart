@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_app/provider/weather_provider.dart';
-import 'package:weather_app/widgets/current_weather_widget.dart';
-import 'package:weather_app/widgets/daily_forecast_list_widget.dart';
-import 'package:weather_app/widgets/error_info.dart';
-import 'package:weather_app/widgets/hourly_list_widget.dart';
-import 'package:weather_app/widgets/search_city_text_field_widget.dart';
+import 'package:weather_app/view/home/widgets/home_daily_forecast.dart';
+import 'package:weather_app/view/home/widgets/home_hourly_forecast.dart';
+import 'package:weather_app/view/home/widgets/search_text_field.dart';
+import 'package:weather_app/view/shared/widgets/location_error.dart';
+import 'package:weather_app/view/shared/widgets/request_error.dart';
+import 'package:weather_app/view/home/widgets/home_current_weather.dart';
 
 class HomeScreen extends StatefulWidget {
+  static const routeName = '/';
+
   const HomeScreen({super.key});
 
   @override
@@ -64,15 +67,12 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             child: Consumer<WeatherProvider>(
               builder: (context, weatherProvider, _) {
-                if (weatherProvider.isLocationError)
-                  return Center(child: Text('Location Error'));
-                if (weatherProvider.isRequestError)
-                  return ListView(
-                    children: [SearchCityTextFieldWidget(), ErrorInfo()],
-                  );
-                if (weatherProvider.isNotFound)
-                  return Center(child: Text('Request Error'));
-                else {
+                if (weatherProvider.isLocationError) {
+                  return const LocationError();
+                }
+                if (weatherProvider.isRequestError) {
+                  return const RequestError();
+                } else {
                   if (weatherProvider.isLoading) {
                     return Expanded(
                       child: Center(
@@ -85,10 +85,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   return ListView(
                     children: [
-                      SearchCityTextFieldWidget(),
-                      CurrentWeatherWidget(),
-                      HourlyListWidget(),
-                      DailyForecastListWidget()
+                      SearchTextField(),
+                      HomeCurrentWeather(),
+                      HomeHourlyForecast(),
+                      HomeDailyForecast()
                     ],
                   );
                 }

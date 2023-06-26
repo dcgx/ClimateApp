@@ -4,14 +4,14 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_app/provider/weather_provider.dart';
 
-class CurrentWeatherWidget extends StatefulWidget {
-  const CurrentWeatherWidget({super.key});
+class HomeCurrentWeather extends StatefulWidget {
+  const HomeCurrentWeather({super.key});
 
   @override
-  State<CurrentWeatherWidget> createState() => _CurrentWeatherWidgetState();
+  State<HomeCurrentWeather> createState() => _HomeCurrentWeatherState();
 }
 
-class _CurrentWeatherWidgetState extends State<CurrentWeatherWidget> {
+class _HomeCurrentWeatherState extends State<HomeCurrentWeather> {
   @override
   Widget build(BuildContext context) {
     return Consumer<WeatherProvider>(
