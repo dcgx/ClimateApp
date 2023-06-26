@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -21,6 +20,7 @@ class WeatherProvider with ChangeNotifier {
   LatLng? currentLocation;
 
   Weather? currentWeather;
+  List<Forecast>? forecastWeather;
   List<Forecast>? dailyForecastWeather;
   List<Forecast>? hourlyForecastWeather;
 
@@ -82,7 +82,6 @@ class WeatherProvider with ChangeNotifier {
     Uri url = Uri.parse(
       'https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&units=metric&lang=es&appid=$apiKey',
     );
-    print(url);
 
     try {
       Response response = await http.get(url);
@@ -107,7 +106,7 @@ class WeatherProvider with ChangeNotifier {
     isLocationError = false;
 
     Uri url = Uri.parse(
-      'https://api.openweathermap.org/data/2.5/weather?q=$query&units=metric&appid=$apiKey',
+      'https://api.openweathermap.org/data/2.5/weather?q=$query&units=metric&lang=es&appid=$apiKey',
     );
 
     try {
@@ -122,7 +121,9 @@ class WeatherProvider with ChangeNotifier {
             currentWeather!.lat.toDouble(), currentWeather!.long.toDouble()));
       }
     } catch (error) {
-      print(error);
+      if (kDebugMode) {
+        print(error);
+      }
       isRequestError = true;
     } finally {
       isLoading = false;
@@ -140,8 +141,9 @@ class WeatherProvider with ChangeNotifier {
     try {
       final response = await http.get(url);
       final data = json.decode(response.body) as Map<String, dynamic>;
-      hourlyForecastWeather = _getHourlyForecastWeather(data['list']);
-      dailyForecastWeather = _getDailyForecastWeather(data['list']);
+      forecastWeather = _mapForecastWeather(data['list']);
+      hourlyForecastWeather = _mapHourlyForecastWeather(data['list']);
+      dailyForecastWeather = _mapDailyForecastWeather(data['list']);
     } catch (error) {
       if (kDebugMode) {
         print(error);
@@ -153,7 +155,25 @@ class WeatherProvider with ChangeNotifier {
     }
   }
 
-  List<Forecast> _getHourlyForecastWeather(List<dynamic> list) {
+  List<Forecast> getHourlyForecastByDay(String day) {
+    List<Forecast>? hourlyForecast = [];
+
+    for (var forecast in forecastWeather!) {
+      if (day == forecast.day) {
+        hourlyForecast.add(forecast);
+      }
+    }
+    return hourlyForecast;
+  }
+
+  List<Forecast> _mapForecastWeather(List<dynamic> list) {
+    return list.map((item) {
+      Forecast forecast = Forecast.fromJson(item);
+      return forecast;
+    }).toList();
+  }
+
+  List<Forecast> _mapHourlyForecastWeather(List<dynamic> list) {
     DateTime today = DateTime.now();
 
     return list.where((item) {
@@ -166,7 +186,7 @@ class WeatherProvider with ChangeNotifier {
     }).toList();
   }
 
-  List<Forecast> _getDailyForecastWeather(List<dynamic> list) {
+  List<Forecast> _mapDailyForecastWeather(List<dynamic> list) {
     List<Forecast>? dailyForecast = [];
 
     for (var item in list) {

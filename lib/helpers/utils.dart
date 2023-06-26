@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class Mapper {
-  static Icon mapWeatherTypeToIcon(String weatherType, double iconSize) {
+  static Icon mapWeatherTypeToIcon(String weatherType, double iconSize, Color color) {
     IconData icon;
     switch (weatherType) {
       case 'Thunderstorm':
@@ -47,6 +47,6 @@ class Mapper {
       default:
         icon = MdiIcons.weatherCloudy;
     }
-    return Icon(icon, size: iconSize, color: Colors.white);
+    return Icon(icon, size: iconSize, color: color);
   }
 }

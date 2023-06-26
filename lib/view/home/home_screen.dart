@@ -4,6 +4,7 @@ import 'package:weather_app/provider/weather_provider.dart';
 import 'package:weather_app/view/home/widgets/home_daily_forecast.dart';
 import 'package:weather_app/view/home/widgets/home_hourly_forecast.dart';
 import 'package:weather_app/view/home/widgets/search_text_field.dart';
+import 'package:weather_app/view/shared/widgets/loading.dart';
 import 'package:weather_app/view/shared/widgets/location_error.dart';
 import 'package:weather_app/view/shared/widgets/request_error.dart';
 import 'package:weather_app/view/home/widgets/home_current_weather.dart';
@@ -25,7 +26,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-
     _fetch();
   }
 
@@ -54,21 +54,14 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Consumer<WeatherProvider>(
               builder: (context, weatherProvider, _) {
                 if (weatherProvider.isLocationError) {
-                  return const LocationError();
+                  return const LocationError(error: "No se pudo obtener la ubicación");
                 }
                 if (weatherProvider.isRequestError) {
-                  return const RequestError();
+                  return const RequestError(error: "Ciudad no encontrada",);
+                }
+                if (weatherProvider.isLoading) {
+                  return const Loading();
                 } else {
-                  if (weatherProvider.isLoading) {
-                    return const Expanded(
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                        ),
-                      ),
-                    );
-                  }
-
                   return ListView(
                     children: const [
                       SearchTextField(),

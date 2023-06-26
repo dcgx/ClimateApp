@@ -53,7 +53,7 @@ class _HomeHourlyForecastState extends State<HomeHourlyForecast> {
                             ),
                             Container(
                                 child: Mapper.mapWeatherTypeToIcon(
-                                    forecast.weatherType, 20)),
+                                    forecast.weatherType, 20, Colors.white)),
                           ],
                         ),
                         Column(

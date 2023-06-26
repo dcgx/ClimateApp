@@ -36,18 +36,8 @@ class Forecast extends ChangeNotifier {
     );
   }
 
+  @override
   toString() {
-    return "temp: " +
-        temp.toString() +
-        ", tempMax: " +
-        tempMax.toString() +
-        ", tempMin: " +
-        tempMin.toString() +
-        ", day: " +
-        day.toString() +
-        ", hour: " +
-        hour.toString() +
-        ", datetime: " +
-        datetime.toString();
+    return "temp: $temp, tempMax: $tempMax, tempMin: $tempMin, day: $day, hour: $hour, datetime: $datetime";
   }
 }
