@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_app/provider/weather_provider.dart';
 import 'package:weather_app/view/home/widgets/home_daily_forecast.dart';
@@ -19,20 +18,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool _isLoading = false;
-
   Future<void> _fetch() {
-    _isLoading = true;
-    return Provider.of<WeatherProvider>(context, listen: false)
-        .getWeather()
-        .then((_) {
-      setState(() {
-        _isLoading = false;
-      });
-    });
-  }
-
-  Future<void> _refresh() {
     return Provider.of<WeatherProvider>(context, listen: false).getWeather();
   }
 
@@ -49,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30),
-              gradient: LinearGradient(
+              gradient: const LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomRight,
                 colors: [
@@ -60,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.25),
-                  offset: Offset(0, 8),
+                  offset: const Offset(0, 8),
                   blurRadius: 4,
                 ),
               ],
@@ -74,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   return const RequestError();
                 } else {
                   if (weatherProvider.isLoading) {
-                    return Expanded(
+                    return const Expanded(
                       child: Center(
                         child: CircularProgressIndicator(
                           color: Colors.white,
@@ -84,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
 
                   return ListView(
-                    children: [
+                    children: const [
                       SearchTextField(),
                       HomeCurrentWeather(),
                       HomeHourlyForecast(),

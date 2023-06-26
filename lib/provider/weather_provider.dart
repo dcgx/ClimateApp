@@ -57,6 +57,7 @@ class WeatherProvider with ChangeNotifier {
     if (isRefresh) notifyListeners();
 
     Position? locData = await getLocation();
+    // ignore: unnecessary_null_comparison
     if (locData == null) {
       isLocationError = true;
       notifyListeners();
@@ -85,14 +86,12 @@ class WeatherProvider with ChangeNotifier {
 
     try {
       Response response = await http.get(url);
-      print('-response-');
-      print(response.body);
-      print(response.statusCode);
       final jsonDecoded = json.decode(response.body) as Map<String, dynamic>;
-      print(jsonDecoded);
       currentWeather = Weather.fromJson(jsonDecoded);
     } catch (error) {
-      print(error);
+      if (kDebugMode) {
+        print(error);
+      }
       isLoading = false;
       isRequestError = true;
     } finally {
@@ -124,7 +123,7 @@ class WeatherProvider with ChangeNotifier {
       }
     } catch (error) {
       print(error);
-      this.isRequestError = true;
+      isRequestError = true;
     } finally {
       isLoading = false;
       notifyListeners();
@@ -132,28 +131,22 @@ class WeatherProvider with ChangeNotifier {
   }
 
   Future<void> getForecastByLocation(LatLng location) async {
-    DateTime today = DateTime.now();
-
     isLoading = true;
     notifyListeners();
     Uri url = Uri.parse(
       'https://api.openweathermap.org/data/2.5/forecast?lat=${location.latitude}&lon=${location.longitude}&units=metric&lang=es&appid=$apiKey',
     );
-    print(url);
 
     try {
       final response = await http.get(url);
       final data = json.decode(response.body) as Map<String, dynamic>;
-
-      print(data['list']);
       hourlyForecastWeather = _getHourlyForecastWeather(data['list']);
       dailyForecastWeather = _getDailyForecastWeather(data['list']);
-
-      print('dailyForecastWeather');
-      print(dailyForecastWeather);
     } catch (error) {
-      print(error);
-      this.isRequestError = true;
+      if (kDebugMode) {
+        print(error);
+      }
+      isRequestError = true;
     } finally {
       isLoading = false;
       notifyListeners();
@@ -176,13 +169,13 @@ class WeatherProvider with ChangeNotifier {
   List<Forecast> _getDailyForecastWeather(List<dynamic> list) {
     List<Forecast>? dailyForecast = [];
 
-    list.forEach((item) {
+    for (var item in list) {
       Forecast forecast = Forecast.fromJson(item);
 
       if (dailyForecast.where((item) => item.day == forecast.day).isEmpty) {
         dailyForecast.add(forecast);
       }
-    });
+    }
 
     return dailyForecast;
   }
