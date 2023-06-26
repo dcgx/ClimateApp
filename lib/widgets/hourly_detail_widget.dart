@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:weather_app/helpers/utils.dart';
+
+import '../models/forecast.dart';
 
 class HourlyDetailWidget extends StatefulWidget {
-  const HourlyDetailWidget({super.key});
+  final Forecast? forecast;
+
+  const HourlyDetailWidget({super.key, this.forecast});
 
   @override
   State<HourlyDetailWidget> createState() => _HourlyDetailWidgetState();
@@ -18,27 +23,18 @@ class _HourlyDetailWidgetState extends State<HourlyDetailWidget> {
           Column(
             children: [
               Text(
-                '10 am',
+                this.widget.forecast!.hour,
                 style:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
               ),
               Container(
-                child: SvgPicture.asset(
-                  'assets/icons/sun.svg',
-                  height: 35,
-                  color: Colors.white,
-                ),
-              ),
-              Text(
-                '70 %',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.w200),
-              ),
+                  child: Mapper.mapWeatherTypeToIcon(
+                      this.widget.forecast!.weatherType, 20)),
             ],
           ),
           Column(
             children: [
-              Text('14°',
+              Text(this.widget.forecast!.temp.toStringAsFixed(1) + '°',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,

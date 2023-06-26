@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:weather_app/helpers/utils.dart';
+import 'package:weather_app/models/forecast.dart';
 
 class DailyForecastListItemWidget extends StatefulWidget {
-  const DailyForecastListItemWidget({super.key});
+  final Forecast? forecast;
+  const DailyForecastListItemWidget({super.key, this.forecast});
 
   @override
   State<DailyForecastListItemWidget> createState() =>
@@ -18,27 +21,23 @@ class _DailyForecastListItemWidgetState
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text('Monday',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold)),
-            SizedBox(width: 10),
-            Container(
-              child: SvgPicture.asset(
-                'assets/icons/sun.svg',
-                height: 35,
-                color: Colors.white,
-              ),
+            Expanded(
+              child: Text(this.widget.forecast!.day ?? '-',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold)),
             ),
             SizedBox(width: 10),
-            Text('60%',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w200)),
-            Text('18° / 14°',
+            Expanded(
+              child: Container(
+                  child: Mapper.mapWeatherTypeToIcon(
+                      this.widget.forecast!.weatherType, 40)),
+            ),
+            SizedBox(width: 10),
+            Text(
+                "${this.widget.forecast!.tempMax.toStringAsFixed(1)}° / ${this.widget.forecast!.tempMin.toStringAsFixed(1)}°",
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 20,

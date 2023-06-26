@@ -1,17 +1,17 @@
 import 'package:flutter/cupertino.dart';
 
 class Weather with ChangeNotifier {
-  final double temp;
-  final double tempMax;
-  final double tempMin;
-  final double lat;
-  final double long;
-  final double feelsLike;
+  final num temp;
+  final num tempMax;
+  final num tempMin;
+  final num lat;
+  final num long;
+  final num feelsLike;
   final int pressure;
   final String description;
-  final String currently;
+  final String type;
   final int humidity;
-  final double windSpeed;
+  final num windSpeed;
   final String cityName;
 
   Weather({
@@ -23,7 +23,7 @@ class Weather with ChangeNotifier {
     required this.feelsLike,
     required this.pressure,
     required this.description,
-    required this.currently,
+    required this.type,
     required this.humidity,
     required this.windSpeed,
     required this.cityName,
@@ -39,10 +39,11 @@ class Weather with ChangeNotifier {
       feelsLike: (json['main']['feels_like']).toDouble(),
       pressure: json['main']['pressure'],
       description: json['weather'][0]['description'],
-      currently: json['weather'][0]['main'],
+      type: json['weather'][0]['main'],
       humidity: json['main']['humidity'],
       windSpeed: (json['wind']['speed']).toDouble(),
       cityName: json['name'],
     );
   }
 }
+

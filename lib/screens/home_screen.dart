@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_app/provider/weather_provider.dart';
+import 'package:weather_app/widgets/current_weather_widget.dart';
 import 'package:weather_app/widgets/daily_forecast_list_widget.dart';
 import 'package:weather_app/widgets/hourly_list_widget.dart';
+import 'package:weather_app/widgets/search_city_text_field_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,39 +17,32 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool _isLoading = false;
 
-  Future<void> _getData() {
+  Future<void> _fetch() {
     _isLoading = true;
-
-    return Future.delayed(Duration(seconds: 3), () {
-      _isLoading = false;
+    return Provider.of<WeatherProvider>(context, listen: false)
+        .getWeather()
+        .then((_) {
+      setState(() {
+        _isLoading = false;
+      });
     });
+  }
+
+  Future<void> _refresh() {
+    return Provider.of<WeatherProvider>(context, listen: false)
+        .getWeather();
   }
 
   @override
   void initState() {
     super.initState();
 
-    _getData();
+    _fetch();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        bottomNavigationBar: SizedBox(
-          height: 93,
-          child: BottomNavigationBar(
-            
-            backgroundColor: Colors.grey[900], items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: '',
-            ),
-          ]),
-        ),
         body: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30),
@@ -76,61 +71,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 else {
                   return ListView(
                     children: [
-                      Column(
-                        children: [
-                          Container(
-                            child: Text(
-                              '14 °',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 130,
-                              ),
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                child: Text(
-                                  'Santiago',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.white,
-                                      height: 1.5),
-                                ),
-                              ),
-                              Container(
-                                child: SvgPicture.asset(
-                                  'assets/icons/location.svg',
-                                  color: Colors.white,
-                                ),
-                              )
-                            ],
-                          ),
-                          Container(
-                            child: Text(
-                              'Mayormente nublado',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w200,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Container(
-                            child: Text(
-                              'Mie, 10 Agosto 10:14 am',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w200,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      SearchCityTextFieldWidget(),
+                      CurrentWeatherWidget(),
                       HourlyListWidget(),
                       DailyForecastListWidget()
                     ],
