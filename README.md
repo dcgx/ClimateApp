@@ -1,16 +1,13 @@
-# weather_app
+# WeatherAPP
 
-A new Flutter project.
+Aplicación de clima en Flutter con la API de OpenWeatherMap.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Para correr el proyecto es necesario tener instalado Flutter y Dart en su versión más reciente. También se encuentra el APK para la versión Android en la carpeta `apk/flutter-apk/app-debug.apk`.
 
-A few resources to get you started if this is your first Flutter project:
+### Prerequisites
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Para instalar Flutter y Dart, seguir las instrucciones de la documentación oficial de Flutter: https://flutter.dev/docs/get-started/install
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
