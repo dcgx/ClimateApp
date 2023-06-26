@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:weather_app/provider/weather_provider.dart';
 import 'package:weather_app/widgets/current_weather_widget.dart';
 import 'package:weather_app/widgets/daily_forecast_list_widget.dart';
+import 'package:weather_app/widgets/error_info.dart';
 import 'package:weather_app/widgets/hourly_list_widget.dart';
 import 'package:weather_app/widgets/search_city_text_field_widget.dart';
 
@@ -29,8 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _refresh() {
-    return Provider.of<WeatherProvider>(context, listen: false)
-        .getWeather();
+    return Provider.of<WeatherProvider>(context, listen: false).getWeather();
   }
 
   @override
@@ -67,8 +67,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (weatherProvider.isLocationError)
                   return Center(child: Text('Location Error'));
                 if (weatherProvider.isRequestError)
+                  return ListView(
+                    children: [SearchCityTextFieldWidget(), ErrorInfo()],
+                  );
+                if (weatherProvider.isNotFound)
                   return Center(child: Text('Request Error'));
                 else {
+                  if (weatherProvider.isLoading) {
+                    return Expanded(
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
+                  }
+
                   return ListView(
                     children: [
                       SearchCityTextFieldWidget(),

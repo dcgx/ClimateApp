@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:weather_app/models/daily_forecast_weather.dart';
 import 'package:weather_app/models/forecast.dart';
@@ -16,6 +17,7 @@ class WeatherProvider with ChangeNotifier {
   bool isRefresh = false;
   bool isLocationError = false;
   bool isRequestError = false;
+  bool isNotFound = false;
 
   LatLng? currentLocation;
 
@@ -83,13 +85,46 @@ class WeatherProvider with ChangeNotifier {
     print(url);
 
     try {
-      final response = await http.get(url);
+      Response response = await http.get(url);
+      print('-response-');
+      print(response.body);
+      print(response.statusCode);
       final jsonDecoded = json.decode(response.body) as Map<String, dynamic>;
       print(jsonDecoded);
       currentWeather = Weather.fromJson(jsonDecoded);
     } catch (error) {
       print(error);
       isLoading = false;
+      isRequestError = true;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> searchWeather(String query) async {
+    isLoading = true;
+    notifyListeners();
+    isRequestError = false;
+    isLocationError = false;
+
+    Uri url = Uri.parse(
+      'https://api.openweathermap.org/data/2.5/weather?q=$query&units=metric&appid=$apiKey',
+    );
+
+    try {
+      final response = await http.get(url);
+      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      currentWeather = Weather.fromJson(extractedData);
+      if (currentWeather == null) {
+        isNotFound = true;
+        return;
+      } else {
+        await getForecastByLocation(LatLng(
+            currentWeather!.lat.toDouble(), currentWeather!.long.toDouble()));
+      }
+    } catch (error) {
+      print(error);
       this.isRequestError = true;
     } finally {
       isLoading = false;
